@@ -11,54 +11,35 @@ using System.Threading.Tasks;
 namespace RealtimeMap.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        // [Topic("mqtt-binding", "hfp")]
+        [HttpPost("mqtt-binding")]
+        public async Task<IActionResult> Subscribe(Root2 hrtPositionUpdate)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            if (hrtPositionUpdate != null && hrtPositionUpdate.VP != null) {
+                Console.WriteLine($"Data => {hrtPositionUpdate.VP.lat} {hrtPositionUpdate.VP.@long} {hrtPositionUpdate.VP.hdg}");
+            }
+            else
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
+                Console.WriteLine($"NoData => {hrtPositionUpdate}");
+            }
+            // await Task.CompletedTask;
+            // var vehicleId = $"{hrtPositionUpdate.OperatorId}.{hrtPositionUpdate.VehicleNumber}";
 
-        [Topic("mqtt-binding", "/hfp/v2/journey/ongoing/vp/bus/#")]
-        [HttpPost()]
-        public async Task<IActionResult> Subscribe(HrtPositionUpdate hrtPositionUpdate)
-        {
-            await Task.CompletedTask;
-            var vehicleId = $"{hrtPositionUpdate.OperatorId}.{hrtPositionUpdate.VehicleNumber}";
+            // var position = new Position
+            // {
+            //     OrgId = hrtPositionUpdate.OperatorId,
+            //     Longitude = hrtPositionUpdate.VehiclePosition.Long.GetValueOrDefault(),
+            //     Latitude = hrtPositionUpdate.VehiclePosition.Lat.GetValueOrDefault(),
+            //     VehicleId = vehicleId,
+            //     Heading = (int)hrtPositionUpdate.VehiclePosition.Hdg.GetValueOrDefault(),
+            //     DoorsOpen = hrtPositionUpdate.VehiclePosition.Drst == 1,
+            //     Timestamp = hrtPositionUpdate.VehiclePosition.Tst.GetValueOrDefault().Ticks,
+            //     Speed = hrtPositionUpdate.VehiclePosition.Spd.GetValueOrDefault()
+            // };
 
-            var position = new Position
-            {
-                OrgId = hrtPositionUpdate.OperatorId,
-                Longitude = hrtPositionUpdate.VehiclePosition.Long.GetValueOrDefault(),
-                Latitude = hrtPositionUpdate.VehiclePosition.Lat.GetValueOrDefault(),
-                VehicleId = vehicleId,
-                Heading = (int)hrtPositionUpdate.VehiclePosition.Hdg.GetValueOrDefault(),
-                DoorsOpen = hrtPositionUpdate.VehiclePosition.Drst == 1,
-                Timestamp = hrtPositionUpdate.VehiclePosition.Tst.GetValueOrDefault().Ticks,
-                Speed = hrtPositionUpdate.VehiclePosition.Spd.GetValueOrDefault()
-            };
-
-            Console.WriteLine(position.VehicleId);
+            // Console.WriteLine(position.VehicleId);
             return Ok();
         }
     }

@@ -2,24 +2,13 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: mqtt-binding
-  namespace: default
 spec:
   type: bindings.mqtt
   version: v1
   metadata:
     - name: url
-      value: "ssl://mqtt.hsl.fi:8883"
+      value: "mqtt://mqtt.hsl.fi:1883"
     - name: consumerID
-      value: group-e8900e86-4c80-4bed-ba36-7b1e0a630b6a
+      value: "{uuid}"
     - name: topic
-      value: "/hfp/v2/journey/ongoing/vp/bus/#"
-    - name: retain
-      value: "false"
-    - name: cleanSession
-      value: "false"
-    - name: caCert
-      value: ''
-    - name: clientCert
-      value: ''
-    - name: clientKey
-      value: ''
+      value: "$share/{uuid}//hfp/v2/journey/ongoing/vp/bus/#"

@@ -57,7 +57,9 @@ namespace RealtimeMap.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            // app.UseAuthorization();
+
+            app.UseCloudEvents();
 
             app.UseEndpoints(endpoints =>
             {

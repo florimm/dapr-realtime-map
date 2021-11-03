@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace RealtimeMap.API.MQQT
@@ -10,6 +11,17 @@ namespace RealtimeMap.API.MQQT
         [JsonProperty("DOC")] public Payload DoorsClosed { get; set; }
 
         [JsonProperty("DOO")] public Payload DoorsOpen { get; set; }
+
+        // public override string ToString()
+        // {
+        //     StringBuilder sb = new StringBuilder();
+        //     if (VehiclePosition != null) sb.AppendLine(VehiclePosition.ToString());
+        //     if (DoorsClosed != null) sb.AppendLine(DoorsClosed.ToString());
+        //     if (DoorsOpen != null) sb.AppendLine(DoorsOpen.ToString());
+
+        //     return sb.ToString();
+            
+        // }
     }
 
     public class Payload
@@ -61,5 +73,16 @@ namespace RealtimeMap.API.MQQT
         public bool HasValidPosition => Lat is not null &&
                                         Long is not null &&
                                         Hdg is not null;
+
+        public override string ToString() {
+            if (HasValidPosition)
+            {
+                return $"=>>>> {Hdg} {Lat} {Long}";
+            }
+            else
+            {
+                return $"NoPositions";
+            }
+        }
     }
 }
