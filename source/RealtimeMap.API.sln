@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtimeMap.API", "RealtimeMap.API\RealtimeMap.API.csproj", "{5D4528C8-3742-402B-B5F4-9A0D26746FF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealtimeMap.API", "RealtimeMap.API\RealtimeMap.API.csproj", "{5D4528C8-3742-402B-B5F4-9A0D26746FF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

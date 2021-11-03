@@ -1,0 +1,1 @@
+dapr run --app-id appapi --dapr-http-port 3500 --app-port 5001 --app-ssl --dapr-grpc-port 60001 --components-path C:\TestProjects\dapr-realtime-map\source\RealtimeMap.API\dapr\components dotnet run

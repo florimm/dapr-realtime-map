@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RealtimeMap.API.MQQT;
+using Microsoft.OpenApi.Models;
 
 namespace RealtimeMap.API
 {
@@ -26,9 +27,15 @@ namespace RealtimeMap.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services
+                .AddMvc()
+                .AddDapr(build => build.UseHttpEndpoint("http://localhost:3500").UseGrpcEndpoint("http://localhost:60001"));
             services.AddControllers();
-            services.AddHostedService<MqttIngress>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealTimeMap.Service.Api", Version = "v1" });
+            });
+            // services.AddHostedService<MqttIngress>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,23 +44,24 @@ namespace RealtimeMap.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealTimeMap.Service.Api v1"));
             }
 
-            app.UseCors(builder => builder
-                .WithOrigins("http://localhost:8080")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-            );
-
-            // app.UseHttpsRedirection();
+            // app.UseCors(builder => builder
+            //     .WithOrigins("http://localhost:8080")
+            //     .AllowAnyMethod()
+            //     .AllowAnyHeader()
+            //     .AllowCredentials()
+            // );
 
             app.UseRouting();
 
-            // app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapSubscribeHandler();
                 endpoints.MapControllers();
             });
         }

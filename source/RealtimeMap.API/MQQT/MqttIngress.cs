@@ -15,14 +15,14 @@ namespace RealtimeMap.API.MQQT
     {
         private readonly IConfiguration _configuration;
 
-        private readonly IActorProxyFactory _client;
+        // private readonly IActorProxyFactory _client;
 
         private HrtPositionsSubscription _hrtPositionsSubscription;
 
-        public MqttIngress(IConfiguration configuration, IActorProxyFactory client)
+        public MqttIngress(IConfiguration configuration) //, IActorProxyFactory client)
         {
             _configuration = configuration;
-            _client = client;
+            // _client = client;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -58,9 +58,9 @@ namespace RealtimeMap.API.MQQT
             };
 
             Console.WriteLine(position.VehicleId);
-            var actorId = new ActorId(position.VehicleId);
-            var proxy = _client.CreateActorProxy<VehicleActor>(actorId, nameof(VehicleActor));
-            await proxy.PositionChanged(position);
+            // var actorId = new ActorId(position.VehicleId);
+            // var proxy = _client.CreateActorProxy<VehicleActor>(actorId, nameof(VehicleActor));
+            // await proxy.PositionChanged(position);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
