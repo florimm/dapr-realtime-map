@@ -32,10 +32,10 @@ namespace RealtimeMap.API
                 .AddMvc()
                 .AddDapr(build => build.UseHttpEndpoint("http://localhost:3500").UseGrpcEndpoint("http://localhost:60001"));
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealTimeMap.Service.Api", Version = "v1" });
-            });
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealTimeMap.Service.Api", Version = "v1" });
+            // });
             services.AddActors(options => {
                 options.Actors.RegisterActor<VehicleActor>();
                 options.Actors.RegisterActor<SignalRActor>();
@@ -48,8 +48,8 @@ namespace RealtimeMap.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealTimeMap.Service.Api v1"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RealTimeMap.Service.Api v1"));
             }
 
             // app.UseCors(builder => builder

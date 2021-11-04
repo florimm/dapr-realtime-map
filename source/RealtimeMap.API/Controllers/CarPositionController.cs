@@ -27,7 +27,7 @@ namespace RealtimeMap.API.Controllers
         [HttpPost("car-position-change-events")]
         public async Task<IActionResult> Subscribe(Root2 hrtPositionUpdate)
         {
-            if (hrtPositionUpdate != null && hrtPositionUpdate.VP != null) {
+            if (hrtPositionUpdate != null && hrtPositionUpdate.VP != null && $"{hrtPositionUpdate.VP.oper}{hrtPositionUpdate.VP.veh}".StartsWith("64")) {
                 Console.WriteLine($"Data => {hrtPositionUpdate.VP.lat} {hrtPositionUpdate.VP.@long} {hrtPositionUpdate.VP.hdg}");
                 var vehicleId = $"{hrtPositionUpdate.VP.oper}.{hrtPositionUpdate.VP.veh}";
                 var position = new Position()
@@ -42,15 +42,10 @@ namespace RealtimeMap.API.Controllers
                     Speed = hrtPositionUpdate.VP.spd.GetValueOrDefault()
 
                 };
-                var actorId = new ActorId(vehicleId);
-                await proxyFactory
-                    .CreateActorProxy<IVehicleActor>(actorId, nameof(VehicleActor))
-                    .PositionChanged(position);
-            }
-            else
-            {
-                Console.WriteLine($"NoData => {hrtPositionUpdate}");
-            }            
+                var actorId = new ActorId($"{hrtPositionUpdate.VP.oper}{hrtPositionUpdate.VP.veh}");
+                var proxy = proxyFactory.CreateActorProxy<IVehicleActor>(actorId, nameof(VehicleActor));
+                await proxy.PositionChanged(position);
+            }          
             return Ok();
         }
     }
