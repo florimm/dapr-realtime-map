@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RealtimeMap.API.MQQT;
 using Microsoft.OpenApi.Models;
+using RealtimeMap.API.Actors;
 
 namespace RealtimeMap.API
 {
@@ -35,7 +36,10 @@ namespace RealtimeMap.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealTimeMap.Service.Api", Version = "v1" });
             });
-            // services.AddHostedService<MqttIngress>();
+            services.AddActors(options => {
+                options.Actors.RegisterActor<VehicleActor>();
+                options.Actors.RegisterActor<SignalRActor>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +67,7 @@ namespace RealtimeMap.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapActorsHandlers();
                 endpoints.MapSubscribeHandler();
                 endpoints.MapControllers();
             });

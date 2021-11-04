@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: mqtt-binding
+  name: car-position-change-events
 spec:
   type: bindings.mqtt
   version: v1
@@ -11,4 +11,4 @@ spec:
     - name: consumerID
       value: "{uuid}"
     - name: topic
-      value: "$share/{uuid}//hfp/v2/journey/ongoing/vp/bus/#"
+      value: "$share/group-4ca91727-4deb-4b5e-a75b-5986a4261dc3//hfp/v2/journey/ongoing/vp/bus/#"
