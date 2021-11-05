@@ -30,7 +30,7 @@ namespace RealtimeMap.API
         {
             services
                 .AddMvc()
-                .AddDapr(build => build.UseHttpEndpoint("http://localhost:3500").UseGrpcEndpoint("http://localhost:60001"));
+                .AddDapr(build => build.UseHttpEndpoint("http://localhost:3600").UseGrpcEndpoint("http://localhost:60001"));
             services.AddControllers();
             // services.AddSwaggerGen(c =>
             // {

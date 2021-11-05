@@ -19,18 +19,16 @@ namespace RealtimeMap.API.Actors
         }
         public async Task PositionChanged(Position position)
         {
-            Logger.LogInformation($"{Id} position changed to {position.Latitude}, {position.Longitude}");
-            //var vehiclePosition = await StateManager.GetStateAsync<Position>("position");
-            //if (vehiclePosition == null || (position.Latitude != vehiclePosition.Latitude || position.Longitude != vehiclePosition.Longitude))
-            //{
-                System.Console.WriteLine($"Vehicle position changed to {position.Latitude}, {position.Longitude}");
-                // await StateManager.SetStateAsync("position", position);
-                // await StateManager.SaveStateAsync();
-                // await this.ProxyFactory
-                //     .CreateActorProxy<ISignalRActor>(ActorId.CreateRandom(), nameof(SignalRActor))
-                //     .PositionChanged(position);
-            //}
-            await Task.CompletedTask;
+            var vehiclePosition = await StateManager.TryGetStateAsync<Position>("position");
+            if (!vehiclePosition.HasValue || (position.Latitude != vehiclePosition.Value.Latitude || position.Longitude != vehiclePosition.Value.Longitude))
+            {
+                Logger.LogInformation($"{Id} position changed to {position.Latitude}, {position.Longitude}");
+                await StateManager.SetStateAsync("position", position);
+                await StateManager.SaveStateAsync();
+            }
+            await this.ProxyFactory
+                    .CreateActorProxy<ISignalRActor>(new ActorId(position.VehicleId), nameof(SignalRActor))
+                    .PositionChanged(position);
         }
     }
 }
